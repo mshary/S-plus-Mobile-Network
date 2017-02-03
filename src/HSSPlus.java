@@ -13,8 +13,8 @@ import java.sql.PreparedStatement;
 
 import org.projectfloodlight.openflow.types.DatapathId;
 
-public class HSS {
-	HSS() {
+public class HSSPlus {
+	HSSPlus() {
 		// load db driver
 		try {
 			Class.forName(Constants.DB_DRIVER);
@@ -56,7 +56,7 @@ public class HSS {
 
 			// if not, then just return null - validation failed
 			} else {
-				System.out.println("Error in selecting UE key - no matching record in HSS");
+				System.out.println("Error in selecting UE key - no matching record in HSSPlus");
 				return null;
 			};
 
@@ -118,7 +118,7 @@ public class HSS {
 
 			// if not, then just return null - validation failed
 			} else {
-				System.out.println("Error in selecting dispatch id - no matching record in HSS");
+				System.out.println("Error in selecting dispatch id - no matching record in HSSPlus");
 				return null;
 			};
 
