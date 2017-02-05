@@ -62,9 +62,8 @@ public class Utils {
 			System.out.println(e.getMessage());
 		} catch (NoSuchAlgorithmException e) {
 			System.out.println(e.getMessage());
-		} finally {
-			return digest;
 		};
+		return digest;
 	};
 
 	/* 128 bit AES encryption algorithm */
@@ -107,9 +106,8 @@ public class Utils {
 			System.out.println(ex.getMessage());
 		} catch (InvalidAlgorithmParameterException ex) {
 			System.out.println(ex.getMessage());
-		} finally {
-			return encBytes;
 		};
+		return encBytes;
 	};
 
 	/* 128 bit AES decryption algorithm */
@@ -152,9 +150,8 @@ public class Utils {
 			System.out.println(ex.getMessage());
 		} catch (InvalidAlgorithmParameterException ex) {
 			System.out.println(ex.getMessage());
-		} finally {
-			return pText;
 		};
+		return pText;
 	};
 }
 

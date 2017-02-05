@@ -15,7 +15,7 @@ import org.projectfloodlight.openflow.types.DatapathId;
 
 public class HSSPlus {
 	HSSPlus() {
-		// load db driver
+		// load mysql database driver
 		try {
 			Class.forName(Constants.DB_DRIVER);
 		} catch (ClassNotFoundException e) {
@@ -38,7 +38,7 @@ public class HSSPlus {
 		String sql = "SELECT key FROM ue_info WHERE imsi = ? AND tai = ? AND nt = ?";
 
 		try {
-			// connect to mysql db
+			// connect to mysql database
 			cn = DriverManager.getConnection(Constants.DB_CONNECTION, Constants.DB_USER, Constants.DB_PASSWORD);
 
 			// prepare sql statement
@@ -78,7 +78,7 @@ public class HSSPlus {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 
-		// make sure to close db connection and resultset etc. before exit
+		// make sure to close database connection and result-set etc. before exit
 		} finally {
 			try {
 				if (ps != null) { ps.close(); };
@@ -93,7 +93,7 @@ public class HSSPlus {
 		return null;
 	};
 
-	/* Featches the ID of PGW based on the APN (Access Point Name) specified by the UE */
+	/* Fetches the ID of PGW based on the APN (Access Point Name) specified by the UE */
 	public DatapathId getPGW(String apn) {
 		ResultSet rs = null;
 		Connection cn = null;
@@ -102,11 +102,11 @@ public class HSSPlus {
 		String sql = "SELECT dispatch_id FROM pgw_info WHERE apn = ?";
 
 		try {
-			// connect to mysql db
+			// connect to mysql database
 			cn = DriverManager.getConnection(Constants.DB_CONNECTION, Constants.DB_USER, Constants.DB_PASSWORD);
 
 			// prepare sql statement
-			ps = dbConnection.prepareStatement(selectSQL);
+			ps = cn.prepareStatement(sql);
 			ps.setLong(1, Long.parseLong(apn));
 
 			// execute query
@@ -128,7 +128,7 @@ public class HSSPlus {
 			System.out.println(e.getMessage());
 
 		} finally {
-			// make sure to close db connection and resultset etc. before exit
+			// make sure to close database connection and result-set etc. before exit
 			try {
 				if (ps != null) { ps.close(); };
 				if (rs != null) { rs.close(); };
