@@ -97,7 +97,7 @@ public class HSSPlus {
 	public DatapathId getPGW(String apn) {
 		ResultSet rs = null;
 		Connection cn = null;
-		DatapathId dpid = null;
+		DatapathId dispatch_id = null;
 		PreparedStatement ps = null;
 		String sql = "SELECT dispatch_id FROM pgw_info WHERE apn = ?";
 
@@ -114,7 +114,7 @@ public class HSSPlus {
 
 			// check if we have found a matching record
 			if (rs.next()) {
-				dpid = DatapathId.of(rs.getLong("dispatch_id"));
+				dispatch_id = DatapathId.of(rs.getLong("dispatch_id"));
 
 			// if not, then just return null - validation failed
 			} else {
@@ -122,7 +122,7 @@ public class HSSPlus {
 				return null;
 			};
 
-			return dpid;
+			return dispatch_id;
 
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -141,4 +141,3 @@ public class HSSPlus {
 		return null;
 	};
 }
-

@@ -63,6 +63,7 @@ public class Utils {
 		} catch (NoSuchAlgorithmException e) {
 			System.out.println(e.getMessage());
 		};
+		
 		return digest;
 	};
 
@@ -73,14 +74,14 @@ public class Utils {
 	) {
 		if (Constants.DEBUG) {
 			System.out.println("aesEncrypt: plainText => '" + pText + "', EncryptionKey => '" + secretKey + "'");
-		}
+		};
 
 		byte[] ptextBytes = null;
 		try {
 			ptextBytes = pText.getBytes("ISO-8859-1");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		}
+		};
 
 		byte[] encBytes = null;
    
@@ -107,6 +108,7 @@ public class Utils {
 		} catch (InvalidAlgorithmParameterException ex) {
 			System.out.println(ex.getMessage());
 		};
+		
 		return encBytes;
 	};
 
@@ -117,9 +119,7 @@ public class Utils {
 	) {
 		if (Constants.DEBUG) {
             try {
-				System.out.println("aesDecrypt: cipherText => '"
-								+ new String(encBytes, "ISO-8859-1")
-								+ "', DecryptionKey => '" + secretKey + "'");
+				System.out.println("aesDecrypt: cipherText => '" + new String(encBytes, "ISO-8859-1") + "', DecryptionKey => '" + secretKey + "'");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			};
@@ -151,7 +151,7 @@ public class Utils {
 		} catch (InvalidAlgorithmParameterException ex) {
 			System.out.println(ex.getMessage());
 		};
+		
 		return pText;
 	};
 }
-
