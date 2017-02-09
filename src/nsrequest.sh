@@ -2,7 +2,7 @@
 # --- Network Service Request ---
 # author: Muhammad Shahzad Shafi
 # date: Jan. 13, 2017
-# requires: JDK v7.x or better
+# requires: JDK v8.x or better
 
 # It starts specified number of sockets for both TCP & UDP to receieve
 # and respond to Network Service Request from remote host. All sockets
