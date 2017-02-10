@@ -205,16 +205,16 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 					if(payload.contains(Constants.SEPARATOR)){
 						payload_segments = payload.split(Constants.SEPARATOR);
 
-						/* [payload_segments[0] => SINK_SERVICE_REQUEST code, payload_segments[1] => UE Key] */
-						if(payload_segments[0].equals(Constants.SINK_SERVICE_REQUEST)){
+						/* [payload_segments[0] => PDN_SERVICE_REQUEST code, payload_segments[1] => UE Key] */
+						if(payload_segments[0].equals(Constants.PDN_SERVICE_REQUEST)){
 							downlinkDataNotification(payload_segments[1], vlan);
 						} else {
-							System.out.println("ERROR: Unknown message code received from sink, received: '" + payload + "' expected: '" + Constants.SEPARATOR + "'");
+							System.out.println("ERROR: Unknown message code received from PDN, received: '" + payload + "' expected: '" + Constants.SEPARATOR + "'");
 							System.exit(1);
 						};
 
 					} else {
-						System.out.println("ERROR: Unknown packet received from sink, received: '" + payload + "'");
+						System.out.println("ERROR: Unknown packet received from PDN, received: '" + payload + "'");
 						System.exit(1);
 					};
 				};
@@ -462,7 +462,7 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 										"' Out-Port: '" + Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong()) + "' and Out Source IP: '" + Constants.RAN_IP + "' Out-Tunnel Endpoint ID: '" + sgw_te_id + "' of UE Key: '" + payload_segments[2] + "'");
 								};
 
-								installFlowRuleWithIP(eNodeB, ue_port, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong()), sgw_te_id, payload_ext_segments[0], Constants.RAN_IP, Constants.SGWD_IP_UPLINK, Constants.SINK_MAC);
+								installFlowRuleWithIP(eNodeB, ue_port, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong()), sgw_te_id, payload_ext_segments[0], Constants.RAN_IP, Constants.SGWD_IP_UPLINK, Constants.PDN_MAC);
 								uekey_ueip_map.put(payload_segments[2], payload_ext_segments[0]); 
 
 								uekey_sgw_te_id_map.put(payload_segments[2], sgw_dispatch_id.toString() + Constants.SEPARATOR + payload_ext_segments[1]);
@@ -505,7 +505,7 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 										"' In-Tunnel Endpoint ID: '" + Integer.parseInt(payload_segments[1]) + "' Out-Port: '" + ue_port + "' Out-Tunnel Endpoint ID: '" + Integer.parseInt(payload_segments[1]) + "' of UE Key: '" + payload_segments[2] + "'");
 								};
 
-								installFlowRule(eNodeB, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + DatapathId.of(payload_ext_segments[0]).getLong()), Integer.parseInt(payload_segments[1]), ue_port, Integer.parseInt(payload_segments[1]), Constants.SINK_IP, ue_ip, Constants.UE_MAC);
+								installFlowRule(eNodeB, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + DatapathId.of(payload_ext_segments[0]).getLong()), Integer.parseInt(payload_segments[1]), ue_port, Integer.parseInt(payload_segments[1]), Constants.PDN_IP, ue_ip, Constants.UE_MAC);
 
 								response = new StringBuilder();
 								uekey_guti_map.put(payload_segments[2], (Integer.parseInt(payload_segments[2]) + 1000) + "");
@@ -559,7 +559,7 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 								int eNodeB_SGW_PORT = Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong());
 						
 								//delete down-link rule
-								deleteFlowRuleWithTEID(eNodeB, eNodeB_SGW_PORT, Integer.parseInt(payload_segments[2]), Constants.SINK_IP);
+								deleteFlowRuleWithTEID(eNodeB, eNodeB_SGW_PORT, Integer.parseInt(payload_segments[2]), Constants.PDN_IP);
 					
 								if(Constants.DEBUG) {
 									System.out.println("DEFAULT SWITCH deleting downlink rule for UE with IP: '" + payload_segments[1] + "' and UE Tunnel Endpoint ID: '" + payload_segments[2] + "'");
@@ -642,7 +642,7 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 								eNodeB_SGW_PORT = Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong());
 								
 								//delete down-link rule
-								deleteFlowRuleWithTEID(eNodeB, eNodeB_SGW_PORT, Integer.parseInt(payload_segments[2]), Constants.SINK_IP);
+								deleteFlowRuleWithTEID(eNodeB, eNodeB_SGW_PORT, Integer.parseInt(payload_segments[2]), Constants.PDN_IP);
 
 								if(Constants.DEBUG) {
 									System.out.println("DEFAULT SWITCH deleting downlink rule for UE with IP: '" + payload_segments[1] + "' and UE Tunnel Endpoint ID: '" + payload_segments[2] + "'");
@@ -662,31 +662,31 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 							case Constants.UE_CONTEXT_RELEASE_COMPLETE:
 								if(Constants.DEBUG) {
 									System.out.println("--- Case => UE_CONTEXT_RELEASE_COMPLETE ---");
-									System.out.println("RECEIVED UE_CONTEXT_RELEASE_COMPLETE from UE with UE-Key: '" + payload_segments[1] + "', UE-IP: '" + payload_segments[2] +"', Network_Service_Request_Boolean: '" + payload_segments[3] + "' and sink UDP server port: '" + payload_segments[4] + "'");
+									System.out.println("RECEIVED UE_CONTEXT_RELEASE_COMPLETE from UE with UE-Key: '" + payload_segments[1] + "', UE-IP: '" + payload_segments[2] +"', Network_Service_Request_Boolean: '" + payload_segments[3] + "' and PDN UDP server port: '" + payload_segments[4] + "'");
 								};	
 				
-								/* [payload_segments[1] => UE-Key, payload_segments[2] => UE-IP, payload_segments[3] => Network-Service-Request-Boolean, payload_segments[4] => Sink-UDP-Server-Port] */
+								/* [payload_segments[1] => UE-Key, payload_segments[2] => UE-IP, payload_segments[3] => Network-Service-Request-Boolean, payload_segments[4] => PDN-UDP-Server-Port] */
 								if(payload_segments[3].equals("1")) {
 									int serverPort = Integer.parseInt(payload_segments[4]);
 									
 									src_ip = IPv4Address.of(payload_segments[2]);
 									src_port = TransportPort.of(serverPort);
 
-									dst_ip = IPv4Address.of(Constants.SINK_IP);
+									dst_ip = IPv4Address.of(Constants.PDN_IP);
 									dst_port = TransportPort.of(serverPort);
 
-									MacAddress srcMac = MacAddress.of(Constants.UE_MAC), dstMac =  MacAddress.of(Constants.SINK_MAC);
+									MacAddress srcMac = MacAddress.of(Constants.UE_MAC), dstMac =  MacAddress.of(Constants.PDN_MAC);
 									switch_id = switchService.getSwitch(DatapathId.of(Constants.PGW_ID));
 
 									response = new StringBuilder();
 									response.append(Constants.INITIATE_NETWORK_SERVICE_REQUEST).append(Constants.SEPARATOR).append(payload_segments[1]);
 						
 									if(Constants.DEBUG) {
-										System.out.println("Sending Network Service Request to Sink for UE-Key: '" + payload_segments[1] + "', UE-IP: '" + payload_segments[2] + "'");
+										System.out.println("Sending Network Service Request to PDN for UE-Key: '" + payload_segments[1] + "', UE-IP: '" + payload_segments[2] + "'");
 									};
 
-									// Inform Sink to initiate network service request
-									sendPacket(switch_id, OFPort.of(Constants.PGW_SINK_PORT), srcMac, dstMac, src_ip, dst_ip,  IpProtocol.UDP, src_port, dst_port, response.toString());
+									// Inform PDN to initiate network service request
+									sendPacket(switch_id, OFPort.of(Constants.PGW_PDN_PORT), srcMac, dstMac, src_ip, dst_ip,  IpProtocol.UDP, src_port, dst_port, response.toString());
 								};
 
 								step = 8;
@@ -727,7 +727,7 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 										"', Out-Port: '" + Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong())+"' and Out Source IP: '" + Constants.RAN_IP + "', Out-Tunnel Endpoint ID: '" + sgw_te_id + "' of UE Key: '" + payload_segments[1] + "'");
 								};
 								
-								installFlowRuleWithIP(eNodeB, ue_port, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong()), sgw_te_id, ue_ip, Constants.RAN_IP, Constants.SGWD_IP_UPLINK, Constants.SINK_MAC);
+								installFlowRuleWithIP(eNodeB, ue_port, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + sgw_dispatch_id.getLong()), sgw_te_id, ue_ip, Constants.RAN_IP, Constants.SGWD_IP_UPLINK, Constants.PDN_MAC);
 
 								response = new StringBuilder();
 								response.append(Constants.INITIAL_CONTEXT_SETUP_REQUEST).append(Constants.SEPARATOR).append(sgw_te_id);
@@ -775,7 +775,7 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 										"' in Tunnel Endpoint ID: '" + Integer.parseInt(payload_segments[1]) + "' Out-Port: '" + ue_port + "', Out-Tunnel Endpoint ID: '" + Integer.parseInt(payload_segments[1]) + "' of UE Key: '" + payload_segments[2] + "'");
 								};
 								
-								installFlowRule( eNodeB, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + DatapathId.of(payload_ext_segments[0]).getLong()), Integer.parseInt(payload_segments[1]), ue_port, Integer.parseInt(payload_segments[1]), Constants.SINK_IP, ue_ip, Constants.UE_MAC);
+								installFlowRule( eNodeB, Constants.ENODEB_SGW_PORT_MAP.get(Constants.ENODEB_SW_ID + Constants.SEPARATOR + DatapathId.of(payload_ext_segments[0]).getLong()), Integer.parseInt(payload_segments[1]), ue_port, Integer.parseInt(payload_segments[1]), Constants.PDN_IP, ue_ip, Constants.UE_MAC);
 
 								response = new StringBuilder();
 								uekey_guti_map.put(payload_segments[2], (Integer.parseInt(payload_segments[2]) + 1000) + "");
@@ -793,15 +793,15 @@ public class MME implements IFloodlightModule, IOFMessageListener, IOFSwitchList
 								if(Constants.DEBUG) { d2 = new Date(); };
 								break;
 
-							case Constants.SINK_SERVICE_REQUEST:
+							case Constants.PDN_SERVICE_REQUEST:
 								if(Constants.DEBUG) {
-									System.out.println("--- Case => SINK_SERVICE_REQUEST ---");
+									System.out.println("--- Case => PDN_SERVICE_REQUEST ---");
 								};
 
-								if(payload_segments[0].equals(Constants.SINK_SERVICE_REQUEST)) {
+								if(payload_segments[0].equals(Constants.PDN_SERVICE_REQUEST)) {
 									downlinkDataNotification(payload_segments[1], vlan);
 								} else {
-									System.out.println("** ERROR: Unknown message code received from sink, received: '" + payload + "', expected: '" + Constants.SEPARATOR + "' - aborting ");
+									System.out.println("** ERROR: Unknown message code received from PDN, received: '" + payload + "', expected: '" + Constants.SEPARATOR + "' - aborting ");
 									System.exit(1);
 								};
 				

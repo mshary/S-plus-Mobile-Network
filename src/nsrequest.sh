@@ -24,11 +24,11 @@ else
 	cmd=`which javac`
 	if [ -e "$cmd" ] && [ -x "$cmd" ]; then
 		if [ $debug -eq 1 ]; then
-			`which javac` -verbose SinkServer.java
-			`which java` -verbose:class SinkServer $1 $2 $3
+			`which javac` -verbose PDNServer.java
+			`which java` -verbose:class PDNServer $1 $2 $3
 		else
-			`which javac` SinkServer.java
-			`which java`  SinkServer $1 $2 $3
+			`which javac` PDNServer.java
+			`which java`  PDNServer $1 $2 $3
 		fi
 	else
 		echo "JDK not installed. Please install Oracle JDK v8.x or better."

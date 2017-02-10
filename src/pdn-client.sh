@@ -1,10 +1,10 @@
 #!/bin/bash
-# ---- SinkServer Test Client ----
+# ---- PDNServer Test Client ----
 # author: Muhammad Shahzad Shafi
 # data: Jan. 13, 2017
 
 proto="udp"
-host="192.168.0.28"
+host="127.0.0.1"
 port="8001"
 
 input="22@:##:@0x1234567890abcdef"

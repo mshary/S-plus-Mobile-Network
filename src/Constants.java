@@ -21,7 +21,7 @@ public class Constants {
 	/* #### Configurable Parameters #### */
 	final static String UE_MAC = "00:00:01:aa:bb:ca";			// MAC Address of UE/eNodeB Node	*
 	final static String ENODEB_SW_MAC = "00:00:01:aa:bb:cb";	// MAC Address of eNodeB Switch		*
-	final static String SINK_MAC = "00:00:01:aa:bb:cc";			// MAC Address of SINK Node			*
+	final static String PDN_MAC = "00:00:01:aa:bb:cc";			// MAC Address of PDN Node			*
 																//									*
 	// #### IP address of various component interfaces			//									*
 	final static String RAN_IP = "192.168.127.2";				// Radio Access Network IP			*
@@ -31,7 +31,7 @@ public class Constants {
 	final static String SGWD_IP_DOWNLINK = "192.168.125.4";		// SGW-D Down Link IP				*
 	final static String PGWD_IP_UPLINK = "192.168.125.5";		// PGW-D Up Link IP					*
 	final static String PGWD_IP_DOWNLINK = "192.168.127.5";		// PGW-D Down Link IP				*
-	final static String SINK_IP = "192.168.127.6";				// SINK IP							*
+	final static String PDN_IP = "192.168.127.6";				// PDN IP							*
 																//									*
 	// The starting IP address which is allocated to the first UE connecting to our					*
 	// network. After this addresses are assigned in monotonically increasing order.				*
@@ -64,7 +64,7 @@ public class Constants {
 	final static String NAS_STEP_TWO = "20";
 	final static String PAGING_REQUEST = "21";
 	final static String INITIATE_NETWORK_SERVICE_REQUEST = "22";
-	final static String SINK_SERVICE_REQUEST = "23";
+	final static String PDN_SERVICE_REQUEST = "23";
 
 	// Serving Network ID of the MME
 	final static int SN_ID = 1;
@@ -107,8 +107,8 @@ public class Constants {
 	// Port with which eNodeB switch is connected to UE
 	final static int UE_PORT = 3; 
 
-	// Port of PGW-D which is connected with sink
-	final static int PGW_SINK_PORT = 4;
+	// Port of PGW-D which is connected with PDN
+	final static int PGW_PDN_PORT = 4;
 
 	/* We assumed here that there are two SGW-D namely SGW-D1 and SGW-D2 connected
 	 * in series between eNodeB switch and PGW-D.

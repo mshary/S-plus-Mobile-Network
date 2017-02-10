@@ -37,7 +37,7 @@ public class PGWC implements IFloodlightModule {
 
 	int numIPs;
 	int tunnel_id;
-	int pgw_sink_port;
+	int pgw_pdn_port;
 	volatile String ip;
 	
 	Queue<String> reuseable_ip_pool;
@@ -47,8 +47,8 @@ public class PGWC implements IFloodlightModule {
 		numIPs = 0;
 		tunnel_id = 4000;
 
-		// proxy gateway port which is connected to sink
-		pgw_sink_port = Constants.PGW_SINK_PORT;
+		// proxy gateway port which is connected to PDN
+		pgw_pdn_port = Constants.PGW_PDN_PORT;
 		ip = Constants.STARTING_UE_IP;
 		
 		reuseable_te_id_pool = new LinkedList<Integer>();
@@ -163,7 +163,7 @@ public class PGWC implements IFloodlightModule {
 		};
 		
 		// install up-link and down-link rules
-		installPGWRules(pgw_switch, pgw_dispatch_id, Constants.PGW_SGW_PORT_MAP.get(pgw_dispatch_id.getLong() + Constants.SEPARATOR + sgw_dispatch_id.getLong()), pgw_te_id, sgw_tunnel_id, pgw_sink_port, apn, ip);
+		installPGWRules(pgw_switch, pgw_dispatch_id, Constants.PGW_SGW_PORT_MAP.get(pgw_dispatch_id.getLong() + Constants.SEPARATOR + sgw_dispatch_id.getLong()), pgw_te_id, sgw_tunnel_id, pgw_pdn_port, apn, ip);
 		return ip + Constants.SEPARATOR + pgw_te_id;
 	};
 
@@ -179,10 +179,10 @@ public class PGWC implements IFloodlightModule {
 		};
 
 		// delete down-link rule
-		deleteFlowRuleWithIP(pgw_switch, pgw_sink_port, ue_ip);
+		deleteFlowRuleWithIP(pgw_switch, pgw_pdn_port, ue_ip);
 		
 		if(Constants.DEBUG) {
-			System.out.println("PGW-C deleting down-link rule with PGW-D Tunnel Endpoint ID: '" + pgw_te_id + "' and Port: '" + pgw_sink_port + "' for UE with IP: '" + ue_ip + "'");
+			System.out.println("PGW-C deleting down-link rule with PGW-D Tunnel Endpoint ID: '" + pgw_te_id + "' and Port: '" + pgw_pdn_port + "' for UE with IP: '" + ue_ip + "'");
 		};
 		
 		reuseable_ip_pool.add(ue_ip);
@@ -218,21 +218,21 @@ public class PGWC implements IFloodlightModule {
 
 	/* This method installs up-link and down-link flow rules on Proxy Gateway Switch (PGW-D) */
 	private void installPGWRules(IOFSwitch pgw, DatapathId pgw_dispatch_id, int in_port, int pgw_tunnel_id, int sgw_tunnel_id, int out_port, String apn, String ue_ip) {
-		// up-link rule (PGW -> SINK)
+		// up-link rule (PGW -> PDN)
 		if(Constants.DEBUG) {
 			System.out.println("PGW-C installing up-link rule on PGW-D Dispatch ID: '" + pgw_dispatch_id.getLong() + "' with In-Port: '" + in_port + "' and In-Tunnel Endpoint ID: '" + pgw_tunnel_id + 
 					"' to Out-Port: '" + out_port + "' and Out-Tunnel Endpoint ID: '" + pgw_tunnel_id + "' of UE: '" + apn + "'");
 		};
 		
-		installFlowRule(pgw, pgw_dispatch_id, in_port, pgw_tunnel_id, out_port, pgw_tunnel_id, ue_ip, Constants.SINK_IP);
+		installFlowRule(pgw, pgw_dispatch_id, in_port, pgw_tunnel_id, out_port, pgw_tunnel_id, ue_ip, Constants.PDN_IP);
 
-		// down-link rule (SINK to PGW)
+		// down-link rule (PDN to PGW)
 		if(Constants.DEBUG) {
 			System.out.println("PGW-C installing down-link rule on PGW-D Dispatch ID: '" + pgw_dispatch_id.getLong() + "' with In-Port: '" + out_port + "' and Source IP: '" + ue_ip + 
-					"' to Out-Port: '" + in_port + "' and Out-Tunnel Endpoint ID: '" + sgw_tunnel_id + " with Source IP: '" + Constants.SINK_IP + "' of UE: '" + apn + "'");
+					"' to Out-Port: '" + in_port + "' and Out-Tunnel Endpoint ID: '" + sgw_tunnel_id + " with Source IP: '" + Constants.PDN_IP + "' of UE: '" + apn + "'");
 		};
 		
-		installFlowRuleWithIP(pgw, pgw_dispatch_id, out_port, in_port, sgw_tunnel_id, ue_ip, Constants.SINK_IP, Constants.SGWD_IP_DOWNLINK);
+		installFlowRuleWithIP(pgw, pgw_dispatch_id, out_port, in_port, sgw_tunnel_id, ue_ip, Constants.PDN_IP, Constants.SGWD_IP_DOWNLINK);
 	};
 
 	/* This method installs up-link rule */
@@ -269,7 +269,7 @@ public class PGWC implements IFloodlightModule {
 	};
 
 	/* This method installs down-link rule */
-	private void installFlowRuleWithIP(IOFSwitch switch_id, DatapathId distpach_id, int in_port, int out_port, int out_tunnel_id, String ue_ip, String sink_ip, String sgw_ip) {
+	private void installFlowRuleWithIP(IOFSwitch switch_id, DatapathId distpach_id, int in_port, int out_port, int out_tunnel_id, String ue_ip, String pdn_ip, String sgw_ip) {
 		if(Constants.DEBUG) {
 			System.out.println("Installing down-link rule at Switch Service: '"+ switchService + "' and  Dispatch ID: '" + distpach_id + "'");
 		};

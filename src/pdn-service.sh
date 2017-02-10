@@ -1,5 +1,5 @@
 #!/bin/bash
-# --- Sink Service ---
+# --- Public Data Network Service ---
 # author: Muhammad Shahzad Shafi
 # date: Jan. 13, 2017
 # requires: iperf3

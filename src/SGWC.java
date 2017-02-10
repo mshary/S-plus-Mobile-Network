@@ -170,7 +170,7 @@ public class SGWC implements IFloodlightModule, IOFMessageListener {
 		};
 
 		// down-link rule (SGW to ENodeB)
-		installFlowRule(sgw_id, sgw_dispatch_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[1], sgw_te_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[0], ue_te_id, Constants.SINK_IP, Constants.ENODEB_SW_IP_DOWNLINK);
+		installFlowRule(sgw_id, sgw_dispatch_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[1], sgw_te_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[0], ue_te_id, Constants.PDN_IP, Constants.ENODEB_SW_IP_DOWNLINK);
 	};
 
 	/* This is a utility method requiring to know the starting IP address PGW-C will be using */
@@ -190,7 +190,7 @@ public class SGWC implements IFloodlightModule, IOFMessageListener {
 		};
 
 		// delete down-link rule
-		deleteFlowRuleWithTEID(sgw_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[1], sgw_te_id, Constants.SINK_IP);
+		deleteFlowRuleWithTEID(sgw_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[1], sgw_te_id, Constants.PDN_IP);
 		if(Constants.DEBUG) {
 			System.out.println("SGW-C deleting downlink rule with SGW-D Tunnel Eendpoint ID: '" + sgw_te_id + "' for UE with IP: '" + ue_ip + "'");
 		};
@@ -201,7 +201,7 @@ public class SGWC implements IFloodlightModule, IOFMessageListener {
 	/* This method is used to simulate UE idle timeout after which we delete the down-link rule between SGW-D and eNodeB */
 	public void releaseAccessBearersRequest(IOFSwitch sgw_id, DatapathId sgw_dispatch_id, int sgw_te_id, String ue_ip){
 		// delete down-link rule
-		deleteFlowRuleWithTEID(sgw_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[1], sgw_te_id, Constants.SINK_IP);
+		deleteFlowRuleWithTEID(sgw_id, Constants.SGW_PORT_MAP.get(sgw_dispatch_id)[1], sgw_te_id, Constants.PDN_IP);
 		if(Constants.DEBUG){
 			System.out.println("SGW-C deleting downlink rule with SGW-D Tunnel Endpoint ID: '" + sgw_te_id + "' for UE with IP: '" + ue_ip + "'");
 		};

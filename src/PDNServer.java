@@ -1,8 +1,8 @@
 /**
- * #### Sink Service ####
+ * #### Public Data Network Service ####
  * @author Muhammad Shahzad Shafi
  * date: Jan. 11, 2017
- * This class implements Sink Server for
+ * This class simulates PDN Server for
  * S+ Mobile Network Architecture.
  */
 
@@ -19,9 +19,9 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-public class SinkServer implements Runnable {
+public class PDNServer implements Runnable {
 	private final String INITIATE_NETWORK_SERVICE_REQUEST = "22";
-	private final String SINK_SERVICE_REQUEST = "23";
+	private final String PDN_SERVICE_REQUEST = "23";
 	private final String SEPARATOR = "@:##:@";
 	private final int BUFFER_SIZE = 1024;
 
@@ -30,7 +30,7 @@ public class SinkServer implements Runnable {
 	private Selector selector;	
 	private SOCKET_TYPE type;
 	
-	public SinkServer(String host, int startPort, int max, SOCKET_TYPE type) throws IOException {
+	public PDNServer(String host, int startPort, int max, SOCKET_TYPE type) throws IOException {
 		this.type = type;
 		this.selector = Selector.open();
 		
@@ -159,7 +159,7 @@ public class SinkServer implements Runnable {
 	};
 	
 	public void run() {
-		SinkServer.SOCKET_TYPE current_type = SOCKET_TYPE.NONE;
+		PDNServer.SOCKET_TYPE current_type = SOCKET_TYPE.NONE;
 		
 		while (true) {
 
@@ -226,7 +226,7 @@ public class SinkServer implements Runnable {
 		};
 		
 		try { Thread.sleep((long)Math.random()*1000 + 1); } catch (Exception e) { System.out.println(e.getMessage()); };
-		String out = this.SINK_SERVICE_REQUEST + this.SEPARATOR + segments[1];
+		String out = this.PDN_SERVICE_REQUEST + this.SEPARATOR + segments[1];
 		System.out.println("Sent: " + out);
 		return ByteBuffer.wrap(out.getBytes());
 	};
@@ -245,7 +245,7 @@ public class SinkServer implements Runnable {
 		Integer count = new Integer(args[2]);
 
 		try {
-			SinkServer server = new SinkServer(host, port, count, SOCKET_TYPE.ALL);
+			PDNServer server = new PDNServer(host, port, count, SOCKET_TYPE.ALL);
 			server.run();
 			
 		} catch(IOException e) {
