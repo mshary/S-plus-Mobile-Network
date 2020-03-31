@@ -19,7 +19,7 @@
 	>Plymouth University UK
 
 
-* Muhammad Shahzad Shafi
+* Muhammad 
 
 	> Independent Researcher and Developer For Mobile Communication Networks.
 
@@ -27,6 +27,6 @@
 We are reachable at,
 
 * [Muhammad Dawood](mailto:muhammad.dawood@plymouth.ac.uk)
-* [Muhammad Shahzad Shafi](mailto:shaheryarkh@gmail.com)
+
 
 
